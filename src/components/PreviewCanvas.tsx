@@ -150,17 +150,17 @@ export function PreviewCanvas({
       })
     } else if (videoMode === 'ai-visual') {
       // Show AI images with audio-reactive effects
-      renderAIVisuals(canvas, analyser, aiImages)
+      renderAIVisualsInternal(canvas, analyser, aiImages)
     } else if (videoMode === 'lyrics') {
       // Show lyrics with visualization background
-      renderLyricsVideo(canvas, analyser, currentLyric)
+      renderLyricsVideoInternal(canvas, analyser, currentLyric)
     }
 
     return () => {
       visualizationEngineRef.current?.stop()
       audioContext.close()
     }
-  }, [isPlaying, videoMode, visualizationType, aiImages, currentLyric, renderAIVisuals, renderLyricsVideo])
+  }, [isPlaying, videoMode, visualizationType, aiImages, currentLyric, renderAIVisualsInternal, renderLyricsVideoInternal])
 
   // Simulate generation process
   useEffect(() => {
@@ -207,7 +207,7 @@ export function PreviewCanvas({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
-  const renderAIVisuals = useCallback((canvas: HTMLCanvasElement, analyser: AnalyserNode, images: string[]) => {
+  const renderAIVisualsInternal = useCallback((canvas: HTMLCanvasElement, analyser: AnalyserNode, images: string[]) => {
     if (images.length === 0) {
       // Fallback to spectrum visualization
       visualizationEngineRef.current?.start('milkdrop', {
@@ -257,7 +257,7 @@ export function PreviewCanvas({
     animate()
   }, [isPlaying])
 
-  const renderLyricsVideo = useCallback((canvas: HTMLCanvasElement, analyser: AnalyserNode, lyric: SRTEntry | null) => {
+  const renderLyricsVideoInternal = useCallback((canvas: HTMLCanvasElement, analyser: AnalyserNode, lyric: SRTEntry | null) => {
     const ctx = canvas.getContext('2d')!
     const dataArray = new Uint8Array(analyser.frequencyBinCount)
     
